@@ -173,17 +173,20 @@ router.get('/favorites/:userObjectId', async (req, res) => {
 // GET endpoint to retrieve detailed information of user's favorite recipes
 router.get('/favorites/details/:userObjectId', async (req, res) => {
     const userObjectId = req.params.userObjectId; // Get UserObjectId from URL parameters
-
+    console.log("Getting user fav recipies")
     if (!userObjectId) {
         return res.status(400).json({ message: "UserObjectId is required" });
     }
 
     try {
         const userFavoritesRef = db.collection('userFavorites').doc(userObjectId);
-        const userFavoritesDoc = await userFavoritesRef.get();
+        let userFavoritesDoc = await userFavoritesRef.get();
 
         if (!userFavoritesDoc.exists) {
-            return res.status(404).json({ message: 'User favorites not found.' });
+            await userFavoritesRef.set({
+                favoriteRecipes: [] // Initialize with the first recipeId
+            });
+            userFavoritesDoc = await userFavoritesRef.get();
         }
 
         const userFavoritesData = userFavoritesDoc.data();
