@@ -2,14 +2,17 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = 3500;
+const path = require('path');
+
 
 app.use(cors());
 app.use(express.json());
 // Import routes
-const userRoutes = require('./routes/userRoutes');
-const pantryRoutes = require('./routes/pantryRoutes');
-const imageUploadRoutes = require('./routes/imageUpload');
-const recipeRoutes = require('./routes/recipeRoutes'); // Import the new recipe routes
+const userRoutes = require(path.join(__dirname, 'routes', 'userRoutes'));
+
+const pantryRoutes = require(path.join(__dirname, 'routes', 'pantryRoutes'));
+const imageUploadRoutes = require(path.join(__dirname, 'routes', 'imageUpload'));
+const recipeRoutes = require(path.join(__dirname, 'routes', 'recipeRoutes'));// Import the new recipe routes
 
 // Use routes
 app.use('/users', userRoutes);
